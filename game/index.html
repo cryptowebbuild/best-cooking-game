@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saffron &amp; Steel — Bistro Kitchen Rush</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231e1612' stroke='%23f4b942' stroke-width='2'/><circle cx='16' cy='16' r='7' fill='%23ea580c'/></svg>">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #1a120e;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+    #kitchen-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: pointer;
+      touch-action: none;
+    }
+    #sr-announcer {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="kitchen-canvas" aria-label="Saffron and Steel cooking game: move chef with WASD or arrows, Space or Click to chop, sear, simmer, plate and serve orders"></canvas>
+  <p id="sr-announcer" role="status" aria-live="polite"></p>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

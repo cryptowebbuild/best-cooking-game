@@ -1,0 +1,6 @@
+[
+  { "name": "1-service-rush.jpg", "query": "?shot=rush&seed=1" },
+  { "name": "2-title-kitchen.jpg", "query": "?shot=title&seed=1" },
+  { "name": "3-prep-and-sear.jpg", "query": "?shot=combo&seed=2" },
+  { "name": "4-shift-summary.jpg", "query": "?shot=summary&seed=1" }
+]
