@@ -42,14 +42,59 @@ export function createKitchenRenderer(canvas) {
         }
       }
     }
-    // Subtle warm kitchen ambient rug along center corridor
-    ctx.fillStyle = 'rgba(180, 120, 75, 0.14)';
+    // Warm bistro service lane carpet runner & stitched border
+    ctx.fillStyle = 'rgba(146, 86, 46, 0.18)';
     ctx.beginPath();
-    ctx.roundRect(225, 312, 875, 136, 20);
+    ctx.roundRect(190, 306, 895, 138, 22);
     ctx.fill();
+    ctx.strokeStyle = 'rgba(180, 120, 75, 0.35)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Right warm hardwood dining-window strip near Serve Pass
+    ctx.fillStyle = '#5c341d';
+    ctx.fillRect(1235, 128, 45, WORLD.height - 128);
+    ctx.fillStyle = '#3b2113';
+    ctx.fillRect(1235, 128, 6, WORLD.height - 128);
   }
 
   function drawKitchenFurniture() {
+    // Cozy Hanging Copper Pan Rack & Herb Planters framing hot line
+    ctx.fillStyle = '#523424';
+    ctx.fillRect(280, 140, 686, 6);
+    for (const px of [330, 440, 625, 795, 920]) {
+      ctx.fillStyle = '#d97706';
+      ctx.fillRect(px - 1, 146, 2, 7);
+      ctx.fillStyle = '#c86432';
+      ctx.beginPath();
+      ctx.arc(px, 157, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fef3c7';
+      ctx.beginPath();
+      ctx.arc(px - 2, 155, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Potted Basil & Rosemary Herbs flanking the Hot Line
+    for (const hx of [266, 976]) {
+      ctx.fillStyle = '#b45309';
+      ctx.beginPath();
+      ctx.roundRect(hx - 14, 198, 28, 22, 5);
+      ctx.fill();
+      ctx.fillStyle = '#15803d';
+      ctx.beginPath();
+      ctx.arc(hx - 6, 194, 9, 0, Math.PI * 2);
+      ctx.arc(hx + 6, 194, 9, 0, Math.PI * 2);
+      ctx.arc(hx, 187, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#4ade80';
+      ctx.beginPath();
+      ctx.arc(hx - 2, 186, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     // Left Pantry Wooden Counter Strip
     ctx.fillStyle = '#3e271a';
     ctx.beginPath();
@@ -85,14 +130,14 @@ export function createKitchenRenderer(canvas) {
       ctx.fill();
     }
 
-    // Central Veined Marble Island with shadow
+    // Central Veined Marble Island with shadow + warm oak apron trim
     ctx.fillStyle = 'rgba(15, 23, 42, 0.22)';
     ctx.beginPath();
     ctx.roundRect(284, 474, 738, 104, 12);
     ctx.fill();
-    ctx.fillStyle = '#b9ab99';
+    ctx.fillStyle = '#8a5a3c';
     ctx.beginPath();
-    ctx.roundRect(284, 466, 738, 102, 12);
+    ctx.roundRect(284, 466, 738, 104, 12);
     ctx.fill();
     ctx.fillStyle = PALETTE.marbleCounter;
     ctx.beginPath();
@@ -108,7 +153,19 @@ export function createKitchenRenderer(canvas) {
     ctx.quadraticCurveTo(820, 498, 975, 530);
     ctx.stroke();
 
-    // Right Service Window Pass & Brass Trim
+    // Potted basil beside central prep island bottom corner
+    ctx.fillStyle = '#b45309';
+    ctx.beginPath();
+    ctx.roundRect(236, 514, 28, 24, 5);
+    ctx.fill();
+    ctx.fillStyle = '#16a34a';
+    ctx.beginPath();
+    ctx.arc(245, 509, 9, 0, Math.PI * 2);
+    ctx.arc(255, 509, 9, 0, Math.PI * 2);
+    ctx.arc(250, 502, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Right Service Window Pass & Waiting Diners Silhouettes
     ctx.fillStyle = '#3e271a';
     ctx.beginPath();
     ctx.roundRect(1110, 268, 138, 200, 12);
@@ -117,6 +174,17 @@ export function createKitchenRenderer(canvas) {
     ctx.beginPath();
     ctx.roundRect(1116, 274, 126, 188, 10);
     ctx.fill();
+    // Bistro diners waiting right outside pass window
+    for (const dy of [325, 405]) {
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.arc(1260, dy, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.roundRect(1248, dy + 10, 24, 22, 8);
+      ctx.fill();
+    }
   }
 
   function drawProgressBar(x, y, w, h, frac, color, bg = '#1e293b') {
@@ -172,12 +240,18 @@ export function createKitchenRenderer(canvas) {
         ctx.arc(0, 0, 34, 0, Math.PI * 2);
         ctx.fill();
         if (ss.itemId) {
-          // Glowing flame ring
+          // Glowing gas burner flame crown
           ctx.strokeStyle = ss.cookState === 'burnt' ? '#ef4444' : '#f97316';
           ctx.lineWidth = 4;
           ctx.beginPath();
-          ctx.arc(0, 0, 31, 0, Math.PI * 2);
+          ctx.arc(0, 0, 32, 0, Math.PI * 2);
           ctx.stroke();
+          for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+            ctx.fillStyle = ss.cookState === 'perfect' ? '#fef08a' : '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * 31, Math.sin(a) * 31, 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
         // Copper skillet handle + pan
         ctx.fillStyle = '#b45309';
@@ -275,17 +349,31 @@ export function createKitchenRenderer(canvas) {
         ctx.beginPath();
         ctx.roundRect(-st.w / 2 + 8, -st.h / 2 + 8, st.w - 16, st.h - 16, 8);
         ctx.fill();
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
         if (ss.itemId) {
           drawIngredientArt(ctx, ss.itemId, 0, 0, 0.95);
         } else {
+          // Olive oil cruet & fresh herb resting tray
+          ctx.fillStyle = '#fbbf24';
+          ctx.beginPath();
+          ctx.roundRect(-14, -8, 12, 18, 4);
+          ctx.fill();
+          ctx.fillStyle = '#92400e';
+          ctx.fillRect(-10, -14, 4, 6);
+          ctx.fillStyle = '#22c55e';
+          ctx.beginPath();
+          ctx.ellipse(9, 2, 8, 4, -0.5, 0, Math.PI * 2);
+          ctx.fill();
           ctx.fillStyle = '#e2e8f0';
-          ctx.font = 'bold 11px "Segoe UI", system-ui, sans-serif';
+          ctx.font = 'bold 9px "Segoe UI", system-ui, sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('WARM PASS', 0, 4);
+          ctx.fillText('SPICE PASS', 0, 38);
         }
       } else if (st.kind === 'board') {
-        // Thick wooden cutting board
-        ctx.fillStyle = '#b45309';
+        // Thick walnut & maple cutting board
+        ctx.fillStyle = '#92400e';
         ctx.beginPath();
         ctx.roundRect(-42, -26, 84, 52, 6);
         ctx.fill();
@@ -296,6 +384,11 @@ export function createKitchenRenderer(canvas) {
         if (ss.chopItem) {
           drawIngredientArt(ctx, ss.chopItem, 0, 0, 0.95);
           if (!ss.chopItem.endsWith('_chopped')) {
+            // Active chef knife blade & sliced dice particles beside food
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(10, -14, 18, 5);
+            ctx.fillStyle = '#451a03';
+            ctx.fillRect(28, -14, 8, 5);
             drawProgressBar(-32, -36, 64, 8, ss.chopHits / TIMING.chopHitsNeeded, '#22c55e');
             ctx.fillStyle = '#15803d';
             ctx.font = 'bold 11px "Segoe UI", system-ui, sans-serif';
@@ -598,17 +691,15 @@ export function createKitchenRenderer(canvas) {
   }
 
   function drawTitleOverlay(bestTips) {
-    ctx.fillStyle = 'rgba(18, 12, 9, 0.72)';
-    ctx.fillRect(0, 0, WORLD.width, WORLD.height);
-
-    const w = 660;
-    const h = 420;
+    // Sleek floating Bistro Ribbon cleanly centered in aisle corridor (y: 268..462)
+    const w = 520;
+    const h = 194;
     const x = (WORLD.width - w) / 2;
-    const y = (WORLD.height - h) / 2;
+    const y = 268;
 
-    ctx.fillStyle = '#1e1612';
+    ctx.fillStyle = 'rgba(26, 18, 14, 0.94)';
     ctx.beginPath();
-    ctx.roundRect(x, y, w, h, 18);
+    ctx.roundRect(x, y, w, h, 16);
     ctx.fill();
     ctx.strokeStyle = '#f4b942';
     ctx.lineWidth = 3;
@@ -616,50 +707,36 @@ export function createKitchenRenderer(canvas) {
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#f4b942';
-    ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText('ARTISAN BISTRO RUSH', WORLD.width / 2, y + 48);
+    ctx.font = 'bold 12px "Segoe UI", system-ui, sans-serif';
+    ctx.fillText('ARTISAN BISTRO KITCHEN RUSH', WORLD.width / 2, y + 24);
 
     ctx.fillStyle = '#fffaf3';
-    ctx.font = 'bold 48px Georgia, serif';
-    ctx.fillText('SAFFRON & STEEL', WORLD.width / 2, y + 102);
+    ctx.font = 'bold 34px Georgia, serif';
+    ctx.fillText('SAFFRON & STEEL', WORLD.width / 2, y + 60);
 
-    ctx.fillStyle = '#d6ccc2';
-    ctx.font = '17px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText(
-      'Chop fresh produce, time golden skillet sears, plate dishes & ring the service bell.',
-      WORLD.width / 2,
-      y + 144,
-    );
-
-    // Showcase the 5 dish art medallions
-    let sx = WORLD.width / 2 - 200;
+    // Compact 5 dish art medallions
+    let sx = WORLD.width / 2 - 176;
     for (const r of RECIPES) {
-      drawPlatedDish(ctx, r.id, r.parts, sx, y + 210, 0.95);
-      ctx.fillStyle = '#fde68a';
-      ctx.font = 'bold 11px "Segoe UI", system-ui, sans-serif';
-      ctx.fillText(r.short, sx, y + 245);
-      sx += 100;
+      drawPlatedDish(ctx, r.id, r.parts, sx, y + 98, 0.64);
+      sx += 88;
     }
 
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '15px "Segoe UI", system-ui, sans-serif';
+    ctx.font = '12px "Segoe UI", system-ui, sans-serif';
     ctx.fillText(
-      'Move: WASD / Arrows or Click Station  •  Chop/Interact: Space / E  •  Dash: Shift',
+      `WASD/Click Move • Space Chop/Interact • Shift Dash  |  Best Tips: $${bestTips}`,
       WORLD.width / 2,
-      y + 292,
+      y + 135,
     );
-    ctx.fillStyle = '#4ade80';
-    ctx.font = 'bold 16px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText(`Best Shift Tips: $${bestTips}`, WORLD.width / 2, y + 324);
 
     // Start Button
     ctx.fillStyle = '#ea580c';
     ctx.beginPath();
-    ctx.roundRect(WORLD.width / 2 - 175, y + 346, 350, 48, 10);
+    ctx.roundRect(WORLD.width / 2 - 165, y + 146, 330, 36, 9);
     ctx.fill();
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 18px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText('PRESS SPACE OR CLICK TO COOK', WORLD.width / 2, y + 376);
+    ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
+    ctx.fillText('PRESS SPACE OR CLICK TO COOK', WORLD.width / 2, y + 169);
   }
 
   function drawPauseOverlay() {
@@ -683,17 +760,15 @@ export function createKitchenRenderer(canvas) {
   }
 
   function drawShiftSummary(state, bestTips) {
-    ctx.fillStyle = 'rgba(18, 12, 9, 0.78)';
-    ctx.fillRect(0, 0, WORLD.width, WORLD.height);
-
-    const w = 620;
-    const h = 420;
+    // Compact floating scorecard card leaving surrounding kitchen stations visible
+    const w = 470;
+    const h = 330;
     const x = (WORLD.width - w) / 2;
-    const y = (WORLD.height - h) / 2;
+    const y = 266;
 
-    ctx.fillStyle = '#1e1612';
+    ctx.fillStyle = 'rgba(26, 18, 14, 0.94)';
     ctx.beginPath();
-    ctx.roundRect(x, y, w, h, 18);
+    ctx.roundRect(x, y, w, h, 16);
     ctx.fill();
     ctx.strokeStyle = '#f4b942';
     ctx.lineWidth = 3;
@@ -701,51 +776,50 @@ export function createKitchenRenderer(canvas) {
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#f4b942';
-    ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText('DINNER SERVICE COMPLETE', WORLD.width / 2, y + 46);
+    ctx.font = 'bold 12px "Segoe UI", system-ui, sans-serif';
+    ctx.fillText('DINNER SERVICE COMPLETE', WORLD.width / 2, y + 28);
 
     ctx.fillStyle = '#fffaf3';
-    ctx.font = 'bold 42px Georgia, serif';
-    ctx.fillText('SHIFT SCORECARD', WORLD.width / 2, y + 92);
+    ctx.font = 'bold 30px Georgia, serif';
+    ctx.fillText('SHIFT SCORECARD', WORLD.width / 2, y + 60);
 
     const stars = state.tips >= 550 ? 3 : state.tips >= 280 ? 2 : 1;
     ctx.fillStyle = '#facc15';
-    ctx.font = 'bold 36px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText('★'.repeat(stars) + '☆'.repeat(3 - stars), WORLD.width / 2, y + 138);
+    ctx.font = 'bold 26px "Segoe UI", system-ui, sans-serif';
+    ctx.fillText('★'.repeat(stars) + '☆'.repeat(3 - stars), WORLD.width / 2, y + 90);
 
     const stats = [
       ['TOTAL TIPS EARNED', `$${state.tips}`, '#4ade80'],
       ['DISHES SERVED', `${state.dishesServed}`, '#fffaf3'],
       ['GOLD PERFECT SEARS', `${state.perfectSeared}`, '#facc15'],
       ['MAX STREAK COMBO', `x${Math.max(1, state.maxCombo)}`, '#38bdf8'],
-      ['RECORD SHIFT TIPS', `$${Math.max(bestTips, state.tips)}`, '#f4b942'],
     ];
 
-    let sy = y + 178;
+    let sy = y + 124;
     for (const [label, val, col] of stats) {
-      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillStyle = 'rgba(255,255,255,0.07)';
       ctx.beginPath();
-      ctx.roundRect(x + 60, sy - 20, w - 120, 30, 6);
+      ctx.roundRect(x + 36, sy - 18, w - 72, 28, 6);
       ctx.fill();
       ctx.textAlign = 'left';
       ctx.fillStyle = '#d6ccc2';
-      ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
-      ctx.fillText(label, x + 78, sy);
+      ctx.font = 'bold 13px "Segoe UI", system-ui, sans-serif';
+      ctx.fillText(label, x + 50, sy);
       ctx.textAlign = 'right';
       ctx.fillStyle = col;
-      ctx.font = 'bold 16px "Segoe UI", system-ui, sans-serif';
-      ctx.fillText(val, x + w - 78, sy);
-      sy += 36;
+      ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
+      ctx.fillText(val, x + w - 50, sy);
+      sy += 34;
     }
 
     ctx.fillStyle = '#ea580c';
     ctx.beginPath();
-    ctx.roundRect(WORLD.width / 2 - 185, y + 356, 370, 44, 10);
+    ctx.roundRect(WORLD.width / 2 - 160, y + 272, 320, 40, 9);
     ctx.fill();
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px "Segoe UI", system-ui, sans-serif';
-    ctx.fillText('PRESS SPACE OR CLICK TO PLAY AGAIN', WORLD.width / 2, y + 383);
+    ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
+    ctx.fillText('PRESS SPACE OR CLICK TO PLAY AGAIN', WORLD.width / 2, y + 297);
   }
 
   function draw(state, screen, bestTips, nearStation) {

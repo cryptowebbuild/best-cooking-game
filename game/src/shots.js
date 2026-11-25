@@ -50,8 +50,16 @@ export function stageScene(shotName, world) {
   world.reset();
 
   if (shotName === 'title') {
-    advanceIdle(world, 1.5);
-    return { screen: SCR_TITLE, bestTips: 485 };
+    // Stage lively sizzling pans + prepped tomato visible around the compact welcome banner!
+    walkToAndInteract(world, 'crate_salmon');
+    walkToAndInteract(world, 'skillet_1');
+    walkToAndInteract(world, 'crate_rice');
+    walkToAndInteract(world, 'pot_1');
+    walkToAndInteract(world, 'crate_tomato');
+    walkToPoint(world, 240, 420);
+    walkToAndInteract(world, 'board_1');
+    walkToPoint(world, 250, 340);
+    return { screen: SCR_TITLE, bestTips: 640 };
   }
 
   if (shotName === 'rush') {
@@ -96,8 +104,9 @@ export function stageScene(shotName, world) {
     walkToAndInteract(world, 'board_1');
     advanceIdle(world, 0.08);
     walkToAndInteract(world, 'board_1');
-    walkToPoint(world, 350, 440);
-    waitStationReady(world, 'skillet_1', TIMING.searCookSeconds + 0.35, 2.5);
+    world.state.chef.facingX = 0;
+    world.state.chef.facingY = 1;
+    world.state.chef.chopAnim = 0.14;
 
     world.state.tips = 385;
     world.state.score = 385;
@@ -125,10 +134,14 @@ export function stageScene(shotName, world) {
     walkToAndInteract(world, 'skillet_1');
     walkToAndInteract(world, 'plate_1');
 
+    walkToAndInteract(world, 'crate_bun');
+    walkToPoint(world, 240, 420);
+    walkToAndInteract(world, 'plate_2');
+    walkToAndInteract(world, 'crate_rice');
+    walkToPoint(world, 240, 380);
+    walkToAndInteract(world, 'pot_1');
     walkToAndInteract(world, 'crate_salmon');
     walkToAndInteract(world, 'skillet_2');
-    walkToAndInteract(world, 'crate_rice');
-    walkToAndInteract(world, 'pot_1');
     walkToPoint(world, 660, 420);
     walkToAndInteract(world, 'plate_1');
     world.state.tips = 240;
@@ -142,7 +155,7 @@ export function stageScene(shotName, world) {
     return { screen: SCR_PLAY, bestTips: 485 };
   }
 
-  // Summary screen: advance simulated shift to completion with solid score
+  // Summary screen: stage sizzling active kitchen around compact gold scorecard!
   walkToAndInteract(world, 'crate_steak');
   walkToAndInteract(world, 'skillet_1');
   walkToAndInteract(world, 'crate_mushroom');
@@ -159,13 +172,18 @@ export function stageScene(shotName, world) {
   walkToAndInteract(world, 'plate_1');
   walkToAndInteract(world, 'serve_pass');
 
-  world.state.tips = 640;
-  world.state.score = 640;
-  world.state.dishesServed = 5;
-  world.state.perfectSeared = 4;
+  walkToAndInteract(world, 'crate_salmon');
+  walkToAndInteract(world, 'skillet_2');
+  walkToAndInteract(world, 'crate_rice');
+  walkToAndInteract(world, 'pot_1');
+  waitStationReady(world, 'skillet_2', TIMING.searCookSeconds + 0.15, 2.0);
+
+  world.state.tips = 785;
+  world.state.score = 785;
+  world.state.dishesServed = 6;
+  world.state.perfectSeared = 5;
   world.state.maxCombo = 4;
-  while (world.state.timeLeft > 0) {
-    if (world.step(0.5, { dx: 0, dy: 0 }, false, false, null, null) & EVT_OVER) break;
-  }
-  return { screen: SCR_OVER, bestTips: 640 };
+  world.state.wave = 3;
+  world.state.timeLeft = 0;
+  return { screen: SCR_OVER, bestTips: 785 };
 }

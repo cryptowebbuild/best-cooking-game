@@ -250,41 +250,62 @@ export function drawPlatedDish(ctx, recipeId, partsList, x, y, scale = 1) {
   ctx.stroke();
 
   if (recipeId === 'bistro_burger') {
-    // Complete stacked gourmet burger
+    // Complete stacked gourmet burger with golden cheddar melt & crisp lettuce
     ctx.fillStyle = '#b45309';
     ctx.beginPath();
-    ctx.roundRect(-14, 4, 28, 7, 3);
+    ctx.roundRect(-15, 5, 30, 7, 3);
     ctx.fill();
-    ctx.fillStyle = '#5c2c16';
+    ctx.fillStyle = '#4c1d0d';
     ctx.beginPath();
-    ctx.roundRect(-15, -2, 30, 7, 3);
+    ctx.roundRect(-16, -2, 32, 8, 3);
+    ctx.fill();
+    // Melted cheddar cheese drip
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.moveTo(-15, -3);
+    ctx.lineTo(15, -3);
+    ctx.lineTo(12, 3);
+    ctx.lineTo(5, 0);
+    ctx.lineTo(0, 4);
+    ctx.lineTo(-6, 0);
+    ctx.lineTo(-12, 3);
+    ctx.closePath();
     ctx.fill();
     ctx.fillStyle = '#ef4444';
-    ctx.fillRect(-13, -5, 26, 3);
+    ctx.fillRect(-13, -6, 26, 3);
     ctx.fillStyle = '#22c55e';
-    ctx.fillRect(-14, -7, 28, 2.5);
+    ctx.fillRect(-15, -8, 30, 3);
     ctx.fillStyle = '#f59e0b';
     ctx.beginPath();
-    ctx.ellipse(0, -7, 15, 10, 0, Math.PI, 0);
+    ctx.ellipse(0, -8, 16, 11, 0, Math.PI, 0);
     ctx.fill();
     ctx.fillStyle = '#fef3c7';
-    ctx.fillRect(-5, -13, 3, 1.5);
-    ctx.fillRect(3, -12, 3, 1.5);
+    ctx.fillRect(-6, -15, 3, 1.5);
+    ctx.fillRect(0, -16, 3, 1.5);
+    ctx.fillRect(5, -13, 3, 1.5);
   } else if (recipeId === 'truffle_steak') {
-    drawIngredientArt(ctx, 'steak_seared', -4, -1, 0.78);
-    drawIngredientArt(ctx, 'mushroom_chopped', 9, 4, 0.65);
+    drawIngredientArt(ctx, 'steak_seared', -4, -1, 0.82);
+    drawIngredientArt(ctx, 'mushroom_chopped', 10, 4, 0.7);
+    ctx.fillStyle = '#16a34a';
+    ctx.beginPath();
+    ctx.ellipse(-10, -7, 4, 2, -0.4, 0, Math.PI * 2);
+    ctx.fill();
   } else if (recipeId === 'wild_risotto') {
-    drawIngredientArt(ctx, 'rice_simmered', 0, 0, 0.92);
-    drawIngredientArt(ctx, 'mushroom_chopped', 1, -4, 0.6);
+    drawIngredientArt(ctx, 'rice_simmered', 0, 0, 0.96);
+    drawIngredientArt(ctx, 'mushroom_chopped', 2, -4, 0.64);
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.ellipse(-6, -6, 4.5, 2, -0.5, 0, Math.PI * 2);
+    ctx.fill();
   } else if (recipeId === 'saffron_salmon') {
-    drawIngredientArt(ctx, 'rice_simmered', -4, 2, 0.78);
-    drawIngredientArt(ctx, 'salmon_seared', 5, -3, 0.72);
-    drawIngredientArt(ctx, 'tomato_chopped', 9, 5, 0.48);
+    drawIngredientArt(ctx, 'rice_simmered', -5, 2, 0.8);
+    drawIngredientArt(ctx, 'salmon_seared', 6, -3, 0.76);
+    drawIngredientArt(ctx, 'tomato_chopped', 10, 5, 0.5);
   } else if (recipeId === 'royal_feast') {
-    drawIngredientArt(ctx, 'rice_simmered', 0, 4, 0.75);
-    drawIngredientArt(ctx, 'steak_seared', -8, -4, 0.62);
-    drawIngredientArt(ctx, 'salmon_seared', 9, -4, 0.62);
-    drawIngredientArt(ctx, 'mushroom_chopped', 0, -8, 0.52);
+    drawIngredientArt(ctx, 'rice_simmered', 0, 4, 0.78);
+    drawIngredientArt(ctx, 'steak_seared', -9, -4, 0.66);
+    drawIngredientArt(ctx, 'salmon_seared', 9, -4, 0.66);
+    drawIngredientArt(ctx, 'mushroom_chopped', 0, -9, 0.54);
   } else if (partsList && partsList.length > 0) {
     // Mid-assembly dish: draw placed parts cleanly stacked with slight offsets
     const offsets = [
@@ -305,82 +326,118 @@ export function drawPlatedDish(ctx, recipeId, partsList, x, y, scale = 1) {
 export function drawChefCharacter(ctx, chef) {
   ctx.save();
   ctx.translate(chef.x, chef.y);
+  ctx.scale(1.26, 1.26);
 
-  // Drop shadow
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.28)';
+  // Dash speed aura streaks
+  if (chef.dashTimer > 0) {
+    ctx.strokeStyle = 'rgba(251, 191, 36, 0.65)';
+    ctx.lineWidth = 2.5;
+    for (const dy of [-8, 0, 8]) {
+      ctx.beginPath();
+      ctx.moveTo(-chef.facingX * 16, dy);
+      ctx.lineTo(-chef.facingX * 36, dy);
+      ctx.stroke();
+    }
+  }
+
+  // Soft floor contact shadow
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.30)';
   ctx.beginPath();
-  ctx.ellipse(0, 20, 20, 9, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 21, 21, 9, 0, 0, Math.PI * 2);
   ctx.fill();
 
   const bob = Math.sin(chef.walkPhase) * (Math.hypot(chef.vx, chef.vy) > 10 ? 2.5 : 0);
 
-  // Chef shoulders & jacket
-  ctx.fillStyle = '#f8fafc';
+  // Chef shoulders & double-breasted crisp white coat
+  ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.ellipse(0, 4 + bob, 20, 15, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 5 + bob, 20, 15, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.strokeStyle = '#334155';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Warm terracotta bistro apron
+  // Warm terracotta bistro apron & brass buttons
   ctx.fillStyle = '#c86432';
   ctx.beginPath();
-  ctx.roundRect(-12, 1 + bob, 24, 15, 6);
+  ctx.roundRect(-12, 1 + bob, 24, 16, 6);
+  ctx.fill();
+  ctx.fillStyle = '#fef3c7';
+  ctx.beginPath();
+  ctx.arc(-5, 6 + bob, 1.6, 0, Math.PI * 2);
+  ctx.arc(5, 6 + bob, 1.6, 0, Math.PI * 2);
   ctx.fill();
 
-  // Head
+  // Crimson bistro neckerchief
+  ctx.fillStyle = '#b91c1c';
+  ctx.beginPath();
+  ctx.moveTo(-9, 1 + bob);
+  ctx.lineTo(0, 8 + bob);
+  ctx.lineTo(9, 1 + bob);
+  ctx.closePath();
+  ctx.fill();
+
+  // Expressive head + warm cheeks
   ctx.fillStyle = '#fed7aa';
   ctx.beginPath();
-  ctx.arc(0, -6 + bob, 13, 0, Math.PI * 2);
+  ctx.arc(0, -6 + bob, 13.5, 0, Math.PI * 2);
   ctx.fill();
   ctx.strokeStyle = '#7c2d12';
   ctx.lineWidth = 1.6;
   ctx.stroke();
 
-  // Direction eyes
   const ex = chef.facingX * 4;
   const ey = chef.facingY * 2;
   ctx.fillStyle = '#1e293b';
   ctx.beginPath();
-  ctx.arc(-4 + ex, -6 + ey + bob, 2.1, 0, Math.PI * 2);
-  ctx.arc(4 + ex, -6 + ey + bob, 2.1, 0, Math.PI * 2);
+  ctx.arc(-4 + ex, -6 + ey + bob, 2.2, 0, Math.PI * 2);
+  ctx.arc(4 + ex, -6 + ey + bob, 2.2, 0, Math.PI * 2);
   ctx.fill();
 
-  // Crisp pleated chef toque hat
+  // Crisp tall pleated toque hat
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.roundRect(-11, -24 + bob, 22, 11, 5);
+  ctx.roundRect(-12, -25 + bob, 24, 12, 5);
   ctx.fill();
-  ctx.strokeStyle = '#94a3b8';
+  ctx.strokeStyle = '#64748b';
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(-6, -24 + bob, 6, Math.PI, 0);
-  ctx.arc(0, -26 + bob, 6.5, Math.PI, 0);
-  ctx.arc(6, -24 + bob, 6, Math.PI, 0);
+  ctx.arc(-6, -25 + bob, 6.5, Math.PI, 0);
+  ctx.arc(0, -27 + bob, 7, Math.PI, 0);
+  ctx.arc(6, -25 + bob, 6.5, Math.PI, 0);
   ctx.fill();
   ctx.stroke();
 
-  // Chop knife flash when chopping
+  // Chopping chef's blade gleam flash
   if (chef.chopAnim > 0) {
     ctx.save();
-    ctx.rotate((chef.chopAnim / 0.16) * -0.9);
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillRect(14, -4, 18, 6);
-    ctx.fillStyle = '#78350f';
-    ctx.fillRect(10, -3, 6, 5);
+    ctx.translate(chef.facingX * 8, 8 + bob);
+    ctx.rotate((chef.chopAnim / 0.16) * -0.95);
+    ctx.fillStyle = '#f1f5f9';
+    ctx.beginPath();
+    ctx.moveTo(0, -3);
+    ctx.lineTo(22, -5);
+    ctx.lineTo(24, 2);
+    ctx.lineTo(0, 3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.fillStyle = '#451a03';
+    ctx.fillRect(-7, -3, 8, 5);
     ctx.restore();
   }
 
   // Carried item or full plated meal in hands
   if (chef.holding) {
-    const hx = chef.facingX * 20;
-    const hy = 12 + chef.facingY * 14 + bob;
+    const hx = chef.facingX * 21;
+    const hy = 13 + chef.facingY * 14 + bob;
     if (chef.holding.kind === 'plated') {
-      drawPlatedDish(ctx, chef.holding.recipe.id, chef.holding.recipe.parts, hx, hy, 0.88);
+      drawPlatedDish(ctx, chef.holding.recipe.id, chef.holding.recipe.parts, hx, hy, 0.85);
     } else {
-      drawIngredientArt(ctx, chef.holding.itemId, hx, hy, 0.95);
+      drawIngredientArt(ctx, chef.holding.itemId, hx, hy, 0.92);
     }
   }
 
